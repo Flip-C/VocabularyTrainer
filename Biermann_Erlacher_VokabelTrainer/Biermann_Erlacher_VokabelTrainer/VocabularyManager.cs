@@ -35,18 +35,13 @@ namespace Biermann_Erlacher_VokabelTrainer
             {
                 if (!line.StartsWith(languages[0]))
                 {
-
                     translations = line.Split(';');
-
-                    new Translator() { Languages = languages, Translations = translations };
                     this.translationList.Add(new Translator { Languages = languages, Translations = translations });
                 }
             }
 
-
             //erste line sind die sprachen, rausfiltern und zu jedem object dazu geben
             //jede weiter line in ein array = Übersetzungen     
-
 
             //each row = new Translator with 2 arrays as properties
             //languageArray and translationArray
@@ -57,6 +52,7 @@ namespace Biermann_Erlacher_VokabelTrainer
         //neue Übersetzung hinzufügen 
         //Eingabe im Main
         //übergabe von neuen wörtern
+        //neue wörter zur liste hinzufügen
         public void AddNewWords()
         {
 
