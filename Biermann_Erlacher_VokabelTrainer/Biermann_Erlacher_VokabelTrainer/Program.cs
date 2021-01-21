@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Biermann_Erlacher_Vokabeltrainer
+namespace Biermann_Erlacher_VokabelTrainer
 {
     class Program
     {
