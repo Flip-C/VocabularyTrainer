@@ -27,16 +27,17 @@ namespace Biermann_Erlacher_VokabelTrainer
         public void CsvParser(string filePath)
         {
             string[] lines = File.ReadAllLines(filePath);
-            string[] language = lines[0].Split(';');
-            string[] words = new string[language.Length];
+            string[] languages = lines[0].Split(';');
+            string[] words = new string[languages.Length];
 
-
+           
             foreach (var line in lines)
             {
                     words = line.Split(';');
-                    Translator translation = new Translator(language, words);
-                    translationList.Add(translation);
+                    translationList.Add(new Translator {Languages = languages, Translations = words });
             }
+
+
             //erste line sind die sprachen, rausfiltern und zu jedem object dazu geben
             //jede weiter line in ein array      
 
@@ -46,14 +47,31 @@ namespace Biermann_Erlacher_VokabelTrainer
             //translationList.Add(lang)
         }
 
-        public void AddNewTranslation()
+
+        //neue Übersetzung hinzufügen 
+        //Eingabe im Main
+        //übergabe von neuen wörtern
+        public void AddNewWords()
         {
 
         }
 
+
+        //übersetzung eines wortes und Ursprungswort wird übergeben
+        //Methode check ob übersetzung stimmt
+        //return true/false
         public void CheckingTranslation()
         {
+             
+        }
 
+
+        //bekommt sprache übergeben von welche sie eine Wort zufällig ausgeben soll
+        //gibt ein zufälliges wort in der Liste der jeweils ausgewählten sprache wieder
+        //return string
+        public string RandomWord()
+        {
+            return null;
         }
         #endregion
     }

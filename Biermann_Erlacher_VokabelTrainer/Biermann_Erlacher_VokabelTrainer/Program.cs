@@ -6,7 +6,7 @@ namespace Biermann_Erlacher_VokabelTrainer
     {
         static void Main(string[] args)
         {
-            string filePath = @"C:\Users\Erlacher Fabian\Desktop\Programmieren\VokabelTrainer\Erlacher_Biermann_Vokabeltrainer\Erlacher_Biermann_Vokabeltrainer\Übersetzungen.csv";
+            string filePath = @"C:\Users\Erlacher Fabian\Desktop\Programmieren\Vokabel Trainer\Biermann_Erlacher_VokabelTrainer\Biermann_Erlacher_VokabelTrainer\Übersetzungen.csv";
 
             VocabularyManager manager = new VocabularyManager();
             manager.CsvParser(filePath);
@@ -17,7 +17,7 @@ namespace Biermann_Erlacher_VokabelTrainer
 
         static void AddTranslation()
         {
-            Test
+           
         }
 
         static void VocabularyTest()
