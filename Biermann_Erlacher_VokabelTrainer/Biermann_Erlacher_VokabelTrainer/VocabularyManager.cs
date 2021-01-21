@@ -14,7 +14,7 @@ namespace Biermann_Erlacher_VokabelTrainer
         #region constructor
         public VocabularyManager()
         {
-            List<Translator> translationList = new List<Translator>();
+            this.translationList = new List<Translator>();
         }
         
         
@@ -39,8 +39,7 @@ namespace Biermann_Erlacher_VokabelTrainer
                     translations = line.Split(';');
 
                     new Translator() { Languages = languages, Translations = translations };
-
-                    translationList.Add(new Translator { Languages = languages, Translations = translations });
+                    this.translationList.Add(new Translator { Languages = languages, Translations = translations });
                 }
             }
 
