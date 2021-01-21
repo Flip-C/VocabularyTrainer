@@ -26,20 +26,27 @@ namespace Biermann_Erlacher_VokabelTrainer
         #region methods
         public void CsvParser(string filePath)
         {
-            string[] lines = File.ReadAllLines(filePath);
-            string[] languages = lines[0].Split(';');
-            string[] words = new string[languages.Length];
+            string[] readedLines = File.ReadAllLines(filePath);
+            string[] languages = readedLines[0].Split(';');
+            string[] translations = new string[languages.Length];
 
-           
-            foreach (var line in lines)
+
+            foreach (string line in readedLines)
             {
-                    words = line.Split(';');
-                    translationList.Add(new Translator {Languages = languages, Translations = words });
+                if (!line.StartsWith(languages[0]))
+                {
+
+                    translations = line.Split(';');
+
+                    new Translator() { Languages = languages, Translations = translations };
+
+                    translationList.Add(new Translator { Languages = languages, Translations = translations });
+                }
             }
 
 
             //erste line sind die sprachen, rausfiltern und zu jedem object dazu geben
-            //jede weiter line in ein array      
+            //jede weiter line in ein array = Übersetzungen     
 
 
             //each row = new Translator with 2 arrays as properties
