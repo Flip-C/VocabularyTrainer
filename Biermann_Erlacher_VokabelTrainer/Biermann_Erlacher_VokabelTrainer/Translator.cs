@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Biermann_Erlacher_Vokabeltrainer
+namespace Biermann_Erlacher_VokabelTrainer
 {
     class Translator
     {
