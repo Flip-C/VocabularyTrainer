@@ -15,7 +15,7 @@ namespace Biermann_Erlacher_Vokabeltrainer
 
         static void AddTranslation()
         {
-
+            Test
         }
 
         static void VocabularyTest()
