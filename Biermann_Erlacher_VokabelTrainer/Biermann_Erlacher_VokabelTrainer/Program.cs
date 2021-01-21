@@ -11,6 +11,8 @@ namespace Biermann_Erlacher_VokabelTrainer
             VocabularyManager manager = new VocabularyManager();
             manager.CsvParser(filePath);
             Console.WriteLine("Test");
+
+            Console.WriteLine("CommitTest2");
         }
 
         static void AddTranslation()
