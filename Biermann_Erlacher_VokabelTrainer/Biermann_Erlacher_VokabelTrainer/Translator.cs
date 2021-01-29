@@ -55,10 +55,12 @@ namespace Biermann_Erlacher_VokabelTrainer
 
 
         #region methods
-        public override string ToString()
+        public string GetTranslations(int index)
         {
-            return base.ToString();
+            return Translations[index];
         }
+
+        
         #endregion
     }
 }
