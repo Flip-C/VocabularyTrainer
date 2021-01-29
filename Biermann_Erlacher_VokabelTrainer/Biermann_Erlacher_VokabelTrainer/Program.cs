@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.IO;
 
 namespace Biermann_Erlacher_VokabelTrainer
 {
@@ -6,13 +9,12 @@ namespace Biermann_Erlacher_VokabelTrainer
     {
         static void Main(string[] args)
         {
-            string filePath = @"C:\Users\Erlacher Fabian\Desktop\Programmieren\Vokabel Trainer\Biermann_Erlacher_VokabelTrainer\Biermann_Erlacher_VokabelTrainer\Übersetzungen.csv";
-
+            string filePath = "..//..//..//TranslationFiles//Übersetzungen.csv";
+            bool success = File.Exists(filePath);
+            
             VocabularyManager manager = new VocabularyManager();
             manager.CsvParser(filePath);
-            Console.WriteLine("Test");
 
-            Console.WriteLine("CommitTest2");
         }
 
         static void AddTranslation()
