@@ -49,7 +49,7 @@ namespace Biermann_Erlacher_VokabelTrainer
         //Eingabe im Main von neuen Wörtern
         //übergabe von neuen wörtern
         //neue wörter zur liste hinzufügen
-        //Im Main überprüfen und User auf etwaiige Fehler hinweisen 
+        //Im Main überprüfen und User auf etwaiige Fehler hinweisen
         //return true or false
         public bool AddNewWords(string[] newWords)
         {
