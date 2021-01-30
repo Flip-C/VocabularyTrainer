@@ -22,9 +22,9 @@ namespace Biermann_Erlacher_VokabelTrainer
             {
 
                 //Willkommen und mögliche Funktionen 
-                Console.WriteLine("Hallo und Willkommen zum Vokabeltrainer");
-                Console.WriteLine("Ihnen Stehen folgende Funktionen zur Verfügung\n1. Sie können abfragen welche Sprachen das Programm beinhaltet\n2. Das Programm kann Sie auf 10 unterschiedliche Vokabeln der ausgewählten Sprache prüfen und zählt Ihren Fortschritt.\n3. Wenn Sie schon ein Profi in den bekannten Vokabeln sind, können Sie neue Wörter hinzufügen und sich weiter trainieren\n");
-                Console.WriteLine("Um der Liste ein neues Wort anzuhängen drücken sie bitte >a<\nUm auf 10 Vokabeln geprüft zu werden drücken Sie bitte >t<\nUm das Programm zu beenden drücken Sie bitte >e<");
+                Console.WriteLine("Willkommen zum Vokabeltrainer");
+                Console.WriteLine("Ihnen stehen folgende Funktionen zur Verfügung\n1. Sie können abfragen welche Sprachen das Programm beinhaltet\n2. Das Programm kann Sie auf 10 unterschiedliche Vokabeln der ausgewählten Sprache prüfen und zählt Ihren Fortschritt.\n3. Wenn Sie schon ein Profi in den bekannten Vokabeln sind, können Sie neue Wörter hinzufügen und sich weiter trainieren\n");
+                Console.WriteLine("Für die möglichen Sprachen dürcken Sie bitte >L<\nUm der Liste ein neues Wort anzuhängen drücken sie bitte >A<\nUm auf 10 Vokabeln geprüft zu werden drücken Sie bitte >T<\nUm das Programm zu beenden drücken Sie bitte >E<");
 
                 string input = Console.ReadLine();
 
@@ -38,8 +38,7 @@ namespace Biermann_Erlacher_VokabelTrainer
                         Console.WriteLine("Falsche Eingabe");
                         break;
                 }
-            } while (!inputend);
-
+            } while(inputend);
             
 
             //Aufruf der unten stehenden Methoden Wichtig ist das du den manager übergibst
@@ -65,27 +64,26 @@ namespace Biermann_Erlacher_VokabelTrainer
         //dann ein array mit den übersetzungen an manager.AddNewWords zurück geben
         static void AddTranslation(VocabularyManager manager)
         {
+
             bool succesadd = true;
-            do
-            {
-                
-                Console.WriteLine("\nEs stehen die Sprachen:\n1.'{0}' 2.'{1}' 3.'{2}' 4.'{3}' zur Verfügung", manager.GetTranslationLanguages());
-               
+            //do
+            //{                
+                Console.WriteLine("\nEs stehen die Sprachen:\n1.'{0}' 2.'{1}' 3.'{2}' 4.'{3}' zur Verfügung", manager.GetTranslationLanguages());              
                 
 
-                Console.WriteLine("Geben Sie das Wort in der ersten Sprache {0} ein", manager.GetTranslationLanguages());
+                Console.WriteLine("Geben Sie das Wort in {0} ein", manager.GetTranslationLanguages());
                 
 
-                Console.WriteLine("Geben Sie das Wort in der zweiten Sprache {1} ein", manager.GetTranslationLanguages());
+                Console.WriteLine("Geben Sie das Wort in {1} ein", manager.GetTranslationLanguages());
                
 
-                Console.WriteLine("Geben Sie das Wort in der dritten Sprache {2} ein", manager.GetTranslationLanguages());
+                Console.WriteLine("Geben Sie das Wort in {2} ein", manager.GetTranslationLanguages());
 
 
-                Console.WriteLine("Geben Sie das Wort in der vierten Sprache {3} ein", manager.GetTranslationLanguages());
+                Console.WriteLine("Geben Sie das Wort in {3} ein", manager.GetTranslationLanguages());
 
 
-            } while (!succesadd);                  
+            //} while (succesadd);                  
         }
 
 
@@ -97,52 +95,57 @@ namespace Biermann_Erlacher_VokabelTrainer
         //mit manager.RandomWord(Übergabe von Index der ersten Sprache) bekommst du ein Wort zurück welches dann ausgegeben wird
         //Beim checken mit  "CheckingTranslation" übergibst du einerseits das random wort als erstes, dann das vom user eingegebene wort
         //dann den Index von der ersten Sprache ( die sprache die das Random wort hat) und Index von Sprache in die übersetzt wurde
+
+        //die Nächsten paar zeilen habe ich versucht das "überprüfen" aus zu probieren
+        //wenn du den text unten bis zeile 41 auskommentierst sollte das eigentlich funktionieren
+        //Habs auch nochmal kommentiert 
+
+        //Schleife vom Trainer anpassen!!!
+        //Wie gehts gescheit ins Auswhlmenü zurück?
+
         static void VocabularyTest(VocabularyManager manager)
         {
-            bool succestrain = true;            
-
-            //die Nächsten paar zeilen habe ich versucht das "überprüfen" aus zu probieren
-            //wenn du den text unten bis zeile 41 auskommentierst sollte das eigentlich funktionieren
-            //Habs auch nochmal kommentiert 
+            bool trainingsuccess = true;                 
 
             int firstLanguageIndex = 0; //Deutsch hat Indizes 0
             int secLanguageIndex = 1; //Englisch hat Indizes 0
             //int thirdLanguageIndex = 2; //Englisch hat Indizes 0
             //int fourthLanguageIndex = 3; //Englisch hat Indizes 0
-
             
-            int counter = 0;
+            
+            int counterwdh = 0;
+            int counterright = 0;
             do
             {
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i <= 10; i++)
                 {
                     string comparingWord = manager.RandomWord(firstLanguageIndex);
                     Console.WriteLine();
                     Console.WriteLine(comparingWord);
                     Console.WriteLine("Übersetzen Sie das Wort in {1}", manager.GetTranslationLanguages());
 
-
                     string inputWord = Console.ReadLine(); //Lösung vom User
 
-
-                    ////übergabe mit unten angeführten Daten / return dann true oder false
+                    //übergabe mit unten angeführten Daten / return dann true oder false
                     bool success1 = manager.CheckingTranslation(comparingWord, inputWord, firstLanguageIndex, secLanguageIndex);
                     if (success1)
                     {
                         Console.WriteLine("Wort ist richtig");
+                        counterright++;
                     }
                     else
                     {
                         Console.WriteLine("Wort ist falsch");
                     }
-                    counter = i++;
-                    if (counter == 10)
+                    counterwdh = i++;
+                    if (counterwdh == 10)
                     {
-
-                        succestrain = false;
+                        trainingsuccess = false;
                     }
+                    
                 }
-            } while (!succestrain);
+                Console.WriteLine("Sie haben {0} von 10 Wörter richtig", counterright);
+            } while (trainingsuccess);
 
         }
     }
