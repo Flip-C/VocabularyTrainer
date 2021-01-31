@@ -38,7 +38,7 @@ namespace Biermann_Erlacher_VokabelTrainer
                         Console.WriteLine("Falsche Eingabe");
                         break;
                 }
-            } while(inputend);
+            } while(!inputend);
             
 
             //Aufruf der unten stehenden Methoden Wichtig ist das du den manager übergibst
@@ -50,9 +50,6 @@ namespace Biermann_Erlacher_VokabelTrainer
         //mit manager.irgendwas kannst du dann auf die funktionen im vocabularyManager zugreifen. 
         //also z.b manager.AddNewWord etc... die wird allerdings erst dann von dir aufgerufen, wenn 
         //die ganze userinteraktion abgeschlossen ist, sprich alle wörter in einem gültigen Format eingegeben worden sind
-
-
-
 
 
         //Funktion in VocabularyManager (manager.GetTranslationLanguage) aufrufen, die die aktuellen sprachen in einem Array zurück gibt 
@@ -100,7 +97,7 @@ namespace Biermann_Erlacher_VokabelTrainer
         //wenn du den text unten bis zeile 41 auskommentierst sollte das eigentlich funktionieren
         //Habs auch nochmal kommentiert 
 
-        //Schleife vom Trainer anpassen!!!
+        
         //Wie gehts gescheit ins Auswhlmenü zurück?
 
         static void VocabularyTest(VocabularyManager manager)
@@ -108,16 +105,22 @@ namespace Biermann_Erlacher_VokabelTrainer
             bool trainingsuccess = true;                 
 
             int firstLanguageIndex = 0; //Deutsch hat Indizes 0
-            int secLanguageIndex = 1; //Englisch hat Indizes 0
-            //int thirdLanguageIndex = 2; //Englisch hat Indizes 0
-            //int fourthLanguageIndex = 3; //Englisch hat Indizes 0
+            int secLanguageIndex = 1; //Englisch hat Indizes 1
+            int thirdLanguageIndex = 2; //Französisch hat Indizes 2
+            int fourthLanguageIndex = 3; //Italienisch  hat Indizes 3
             
+            Console.WriteLine("\nIn welcher Sprache möchten Sie die Vokabeln trainieren?\n1.{1} 2.{2} 3.{3} -> Geben Sie die zugehörige Zahl ein", manager.GetTranslationLanguages());
             
-            int counterwdh = 0;
-            int counterright = 0;
-            do
+            int auswahl=int.Parse(Console.ReadLine());
+
+
+            //Deutsch zu Englisch //Habe immer die LanguageIndex geändert also Deutsch 0 und Englisch 1
+            if (auswahl == 1)
             {
-                for (int i = 0; i <= 10; i++)
+                int counterwdh = 0;
+                int counterright = 0;            
+            
+                for (int i = 0; i < 10; i++)
                 {
                     string comparingWord = manager.RandomWord(firstLanguageIndex);
                     Console.WriteLine();
@@ -137,16 +140,92 @@ namespace Biermann_Erlacher_VokabelTrainer
                     {
                         Console.WriteLine("Wort ist falsch");
                     }
-                    counterwdh = i++;
+
+
+                    counterwdh ++;
                     if (counterwdh == 10)
                     {
                         trainingsuccess = false;
                     }
                     
                 }
-                Console.WriteLine("Sie haben {0} von 10 Wörter richtig", counterright);
-            } while (trainingsuccess);
+                Console.WriteLine("Sie haben {0} von 10 Wörter richtig\n", counterright);
+            }           	       
+            
+            //Deutsch zu Französisch Index 0 zu 2
+            else if (auswahl==2)
+            {
+                 int counterwdh = 0;
+                int counterright = 0;
+            
+            
+                for (int i = 0; i < 10; i++)
+                {
+                    string comparingWord = manager.RandomWord(firstLanguageIndex);
+                    Console.WriteLine();
+                    Console.WriteLine(comparingWord);
+                    Console.WriteLine("Übersetzen Sie das Wort in {2}", manager.GetTranslationLanguages());
 
+                    string inputWord = Console.ReadLine(); //Lösung vom User
+
+                    //übergabe mit unten angeführten Daten / return dann true oder false
+                    bool success1 = manager.CheckingTranslation(comparingWord, inputWord, firstLanguageIndex, thirdLanguageIndex);
+                    if (success1)
+                    {
+                        Console.WriteLine("Wort ist richtig");
+                        counterright++;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Wort ist falsch");
+                    }
+                    counterwdh ++;
+                    if (counterwdh == 10)
+                    {
+                        trainingsuccess = false;
+                    }
+                    
+                }
+                Console.WriteLine("Sie haben {0} von 10 Wörter richtig\n", counterright);
+            }       
+             
+            //Deutsch zu Italienisch Index 0 zu 3
+            else if (auswahl==3)
+            {
+                 int counterwdh = 0;
+                int counterright = 0;
+            
+            
+                for (int i = 0; i < 10; i++)
+                {
+                    string comparingWord = manager.RandomWord(firstLanguageIndex);
+                    Console.WriteLine();
+                    Console.WriteLine(comparingWord);
+                    Console.WriteLine("Übersetzen Sie das Wort in {3}", manager.GetTranslationLanguages());
+
+                    string inputWord = Console.ReadLine(); //Lösung vom User
+
+                    //übergabe mit unten angeführten Daten / return dann true oder false
+                    bool success1 = manager.CheckingTranslation(comparingWord, inputWord, firstLanguageIndex, fourthLanguageIndex);
+                    if (success1)
+                    {
+                        Console.WriteLine("Wort ist richtig");
+                        counterright++;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Wort ist falsch");
+                    }
+                    counterwdh ++;
+                    if (counterwdh == 10)
+                    {
+                        trainingsuccess = false;
+                    }
+                    
+                }
+                Console.WriteLine("Sie haben {0} von 10 Wörter richtig\n", counterright);
+            }       
+                                            
         }
     }
 }
