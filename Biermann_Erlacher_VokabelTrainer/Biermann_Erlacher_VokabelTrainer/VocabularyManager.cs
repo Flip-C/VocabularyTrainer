@@ -98,6 +98,12 @@ namespace Biermann_Erlacher_VokabelTrainer
             
             return word;
         }
+
+        //Gibt zurück wie viele verschieden Wörter es gibt
+        public int NumberOfTranslations()
+        {
+            return translationList.Count;
+        }
         #endregion
 
 
