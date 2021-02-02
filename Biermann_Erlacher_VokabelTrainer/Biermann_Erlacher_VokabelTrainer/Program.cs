@@ -13,7 +13,7 @@ namespace Biermann_Erlacher_VokabelTrainer
             //...das file exist müsste man noch abfangen falls false...
             bool success = File.Exists(filePath);
             bool inputend = true;
-
+            test
             VocabularyManager manager = new VocabularyManager();
             manager.CsvParser(filePath);
 
