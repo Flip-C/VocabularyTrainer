@@ -10,12 +10,20 @@ namespace Biermann_Erlacher_VokabelTrainer
         static void Main(string[] args)
         {
             string filePath = "..//..//..//TranslationFiles//Übersetzungen.csv";
-            //...das file exist müsste man noch abfangen falls false...
-            bool success = File.Exists(filePath);
-            bool inputend = true;
+            bool inputEnd = true;
+            bool fileExists = File.Exists(filePath);
+            VocabularyManager vocabularyList = new VocabularyManager();
 
-            VocabularyManager manager = new VocabularyManager();
-            manager.CsvParser(filePath);
+            if (!fileExists)
+            {
+                Console.WriteLine("Die Datei befindet sich nicht im Angegebenen Ordner");
+                Console.WriteLine("Beliebige Taste zum Beenden drücken");
+                Console.ReadLine();
+                return;
+            }
+
+            //Parse vocabularyList from CSV
+            vocabularyList.CsvParser(filePath);
 
             do
             {
@@ -25,43 +33,107 @@ namespace Biermann_Erlacher_VokabelTrainer
                 Console.WriteLine("Ihnen stehen folgende Funktionen zur Verfügung\n1. Sie können abfragen welche Sprachen das Programm beinhaltet\n2. Das Programm kann Sie auf 10 unterschiedliche Vokabeln der ausgewählten Sprache prüfen und zählt Ihren Fortschritt.\n3. Wenn Sie schon ein Profi in den bekannten Vokabeln sind, können Sie neue Wörter hinzufügen und sich weiter trainieren\n");
                 Console.WriteLine("Für die möglichen Sprachen dürcken Sie bitte >L<\nUm der Liste ein neues Wort anzuhängen drücken sie bitte >A<\nUm auf 10 Vokabeln geprüft zu werden drücken Sie bitte >T<\nUm das Programm zu beenden drücken Sie bitte >E<");
 
-                string input = Console.ReadLine();
+                string inputChoice = Console.ReadLine();
 
                 //Auswahl für groß und kleinbuchstaben...
                 //inputEnd ...übersichtlicher...
                 //bei falscher eingabe nicht ganz zum anfang hüpfen...
                 //...nach while schleife abfrage ob programm beendet werden soll...
-                switch (input)
+                switch (inputChoice)
                 {
-                    case "a": AddTranslation(manager); inputend = true; break;
-                    case "A": AddTranslation(manager); inputend = true; break;
-                    case "t": VocabularyTest(manager); inputend = true; break;
-                    case "e": inputend = false; break;
+                    case "a": AddTranslation(vocabularyList); inputEnd = true; break;
+                    case "A": AddTranslation(vocabularyList); inputEnd = true; break;
+                    case "t": VocabularyTest(vocabularyList); inputEnd = true; break;
+                    case "T": VocabularyTest(vocabularyList); inputEnd = true; break;
+                    case "e": inputEnd = false; break;
                     default:
-                        inputend = false;
+                        inputEnd = false;
                         Console.WriteLine("Falsche Eingabe");
                         break;
                 }
-            } while (!inputend);
-
+            } while (!inputEnd);
         }
 
-
-
-        //Funktion in VocabularyManager (manager.GetTranslationLanguage) aufrufen, die die aktuellen sprachen in einem Array zurück gibt 
-        //Array[0] = erste Sprache / Array[1] = zweite Sprache usw...
-        //wie viele Wörter abgefragt werden hängt davon ab wie groß das Array ist. -> Warum abfrage !!Frage von Philipp 
-        //WriteLine "Das neue Wort in {erster Übersetzungsprache} eingeben" ->überprüfen - dann input vom User
-        //WriteLine "Das neue Wort in {zweiter Übersetzungsprache} eingeben" ->überprüfen - dann input vom User
-        //.... das ganze bist die "Array.Lenght"'s Sprache eingegeben wurde
-        //dann ein array mit den übersetzungen an manager.AddNewWords zurück geben
-        static void AddTranslation(VocabularyManager manager)
+        static void AddTranslation(VocabularyManager vocabularyList)
         {
-            //evt. GetTranslationLanguages einmal aufrufen am anfang und in ein lokas array speichern...
-            //dann kann man Console.WriteLine mit for schleife ausgeben und spart sich code und ist flexibel was daher kommt...
-            //nach jedem Console.WriteLine ein ReadLine und die wörter auch in array speichern. ...
+            string[] languageArray = vocabularyList.GetLanguages();
+            string[] newTranslations = new string[languageArray.Length];
+            int numberOfNewWords;
+            bool success = true;
+            bool switchSuccess = true;
 
+            //asking for number of new words
+            Console.WriteLine("Wie viele neue Wörter wollen sie hinzufügen");
+            do
+            {
+                success = true;
+                if (!int.TryParse(Console.ReadLine(), out numberOfNewWords))
+                {
+                    Console.WriteLine("Ungültige Eingabe. Bitte Wiederholen");
+                    success = false;
+                }
+            } while (!success);
+
+            //Big for-loop for adding new words
+            for (int i = 0; i < numberOfNewWords; i++)
+            {
+                do
+                {
+                    //input the translations of the word
+                    for (int j = 0; j < languageArray.Length; j++)
+                    {
+                        Console.WriteLine("Wort in {0} eingeben", languageArray[j]);
+                        newTranslations[j] = Console.ReadLine();
+                    }
+
+                    //user checks input
+                    Console.WriteLine("\nKontrollieren sie ihre Eingabe.");
+                    Console.WriteLine("W - Eingabe Widerholen");
+                    Console.WriteLine("E - Eingabe Bestätigen");
+                    Console.WriteLine("Ihre erste eingabe lautet:\n");
+
+                    //Output languages and input words
+                    foreach (var language in languageArray)
+                    {
+                        Console.Write(language.PadRight(17, ' '));
+                    }
+                    Console.WriteLine();
+                    foreach (var word in newTranslations)
+                    {
+                        Console.Write(word.PadRight(17, ' '));
+                    }
+
+                    //user decide if input is correct
+                    string choice = Console.ReadLine();
+                    do
+                    {
+                        switch (choice)
+                        {
+                            case "W": success = false; break;
+                            case "w": success = false; break;
+                            case "E": success = true; break;
+                            case "e": success = true; break;
+                            default:
+                                Console.WriteLine("Ungültige Eingabe. Bitte Widerholen");
+                                switchSuccess = false;
+                                break;
+                        }
+                    } while (!switchSuccess);
+
+                } while (!success);
+
+                //creating new translation and add new Translation to the list
+                Translator translation = new Translator(newTranslations, languageArray);
+                vocabularyList.AddNewWordsToList(translation);
+            }
+            Console.WriteLine("\nWollen sie noch weitere Wörter hinzufügen schreiben sie ja");
+            Console.WriteLine("Ansonsten beliebige Taste und enter drücken");
+            if (Console.ReadLine() == "ja" || Console.ReadLine() == "Ja");
+            {
+                AddTranslation(vocabularyList);
+            }
         }
+
 
 
 
@@ -75,15 +147,15 @@ namespace Biermann_Erlacher_VokabelTrainer
         //Wie gehts gescheit ins Auswhlmenü zurück? -> von wo?..
 
 
-        static void VocabularyTest(VocabularyManager manager)
+        static void VocabularyTest(VocabularyManager vocabularyList)
         {
-            
+
 
             int firstLanguageIndex = 0; //Deutsch hat Indizes 0
             int secLanguageIndex = 1; //Englisch hat Indizes 1
 
 
-            string[] translationArray = manager.GetTranslationLanguages();
+            string[] translationArray = vocabularyList.GetLanguages();
 
             for (int i = 0; i < translationArray.Length; i++)
             {
@@ -99,7 +171,7 @@ namespace Biermann_Erlacher_VokabelTrainer
             Console.WriteLine("zweite sprache");
             int auswahl2 = int.Parse(Console.ReadLine());
 
-            if (auswahl1 -> auswahl2)
+            /*if (auswahl1 -> auswahl2)
             {
 
             }
@@ -107,12 +179,13 @@ namespace Biermann_Erlacher_VokabelTrainer
             {
 
             }
-            aa
+            */
+
             int counterright = 0;
 
             for (int i = 0; i < 10; i++)
             {
-                string comparingWord = manager.RandomWord(firstLanguageIndex);
+                string comparingWord = vocabularyList.RandomWord(firstLanguageIndex);
                 Console.WriteLine();
                 Console.WriteLine(comparingWord);
                 //...Da würde dann eben immer der indizes kommen, den der User ausgewählt hat...
@@ -121,7 +194,7 @@ namespace Biermann_Erlacher_VokabelTrainer
 
                 string inputWord = Console.ReadLine(); //Lösung vom User
 
-                bool success1 = manager.CheckingTranslation(comparingWord, inputWord, firstLanguageIndex, secLanguageIndex);
+                bool success1 = vocabularyList.CheckingTranslation(comparingWord, inputWord, firstLanguageIndex, secLanguageIndex);
                 if (success1)
                 {
                     Console.WriteLine("Wort ist richtig");
@@ -138,3 +211,4 @@ namespace Biermann_Erlacher_VokabelTrainer
         }
     }
 }
+

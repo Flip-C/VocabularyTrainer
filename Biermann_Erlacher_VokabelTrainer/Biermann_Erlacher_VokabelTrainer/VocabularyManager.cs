@@ -19,9 +19,7 @@ namespace Biermann_Erlacher_VokabelTrainer
         public VocabularyManager()
         {
             this.translationList = new List<Translator>();
-        }
-        
-        
+        } 
         #endregion
 
         #region properties
@@ -42,6 +40,22 @@ namespace Biermann_Erlacher_VokabelTrainer
                     this.translationList.Add(new Translator { Languages = languagesArray, Translations = translations });
                 }
             }
+
+            /*
+            using (StreamReader reader = new StreamReader(filePath))
+            {
+                while (reader.Peek() > 0)
+                {
+                    string line = reader.ReadLine();
+                    if
+                    string[] input = line.Split(';');
+                    languagesArray = input[0].Split(';');
+
+                    this.translationList.Add(new Translator { Languages = languagesArray, Translations = translations });
+                }
+            }
+            */
+            
         }
 
 
@@ -51,14 +65,14 @@ namespace Biermann_Erlacher_VokabelTrainer
         //neue wörter zur liste hinzufügen
         //Im Main überprüfen und User auf etwaiige Fehler hinweisen
         //return true or false
-        public bool AddNewWords(string[] newWords)
+        public bool AddNewWordsToList(Translator newTranslator)
         {
             try
             {
-                translationList.Add(new Translator { Languages = languagesArray, Translations = newWords });
+                translationList.Add(newTranslator);
                 return true;
             }
-            catch (Exception )
+            catch (Exception)
             {
                 return false;
                 throw;
@@ -71,8 +85,8 @@ namespace Biermann_Erlacher_VokabelTrainer
         //return true/false
         public bool CheckingTranslation(string comparingWord, string inputWord, int firstLanguageIndex, int secLanguageIndex)
         {           
-           string correcttranslation = translationList.Find(x => x.Translations[firstLanguageIndex].Contains(comparingWord)).GetTranslations(secLanguageIndex);
-            if (correcttranslation == inputWord)
+           string correctTranslation = translationList.Find(x => x.Translations[firstLanguageIndex].Contains(comparingWord)).GetTranslations(secLanguageIndex);
+            if (correctTranslation == inputWord)
             {
                 return true;
             }
@@ -109,7 +123,7 @@ namespace Biermann_Erlacher_VokabelTrainer
 
         //Gibt ein array zurück wo die aktuellen Sprachen gespeichert sind. z.B languagesArray[0] = deutsch; ..[1] = englisch usw...
         #region static methods
-        public string[] GetTranslationLanguages()
+        public string[] GetLanguages()
         {
             return languagesArray;
         }
