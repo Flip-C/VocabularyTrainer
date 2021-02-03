@@ -19,15 +19,18 @@ namespace Biermann_Erlacher_VokabelTrainer
         public VocabularyManager()
         {
             this.translationList = new List<Translator>();
-        } 
+        }
         #endregion
 
         #region properties
         #endregion
 
         #region methods
-        public void CsvParser(string filePath)
+        public int CsvParser(string filePath)
         {
+            //zwei versionen, einmal mit File.ReadAllLines und einmal mit StreamReader
+
+            /*
             string[] readedLines = File.ReadAllLines(filePath);
             languagesArray = readedLines[0].Split(';');
             string[] translations = new string[languagesArray.Length];
@@ -40,22 +43,35 @@ namespace Biermann_Erlacher_VokabelTrainer
                     this.translationList.Add(new Translator { Languages = languagesArray, Translations = translations });
                 }
             }
-
-            /*
-            using (StreamReader reader = new StreamReader(filePath))
-            {
-                while (reader.Peek() > 0)
-                {
-                    string line = reader.ReadLine();
-                    if
-                    string[] input = line.Split(';');
-                    languagesArray = input[0].Split(';');
-
-                    this.translationList.Add(new Translator { Languages = languagesArray, Translations = translations });
-                }
-            }
             */
-            
+
+
+            try
+            {
+                using (StreamReader reader = new StreamReader(filePath))
+                {
+                    string readedLanguages = reader.ReadLine();
+                    languagesArray = readedLanguages.Split(';');
+                    string[] translations = new string[languagesArray.Length];
+
+                    while (reader.Peek() > 0)
+                    {
+                        string line = reader.ReadLine();
+                        if (!line.StartsWith(languagesArray[0]))
+                        {
+                            translations = line.Split(';');
+                            this.translationList.Add(new Translator { Languages = languagesArray, Translations = translations });
+                        }
+                    }
+                    return -1;
+                }
+
+            }
+            catch (Exception)
+            {
+                return 0 ;
+                throw;
+            }
         }
 
 

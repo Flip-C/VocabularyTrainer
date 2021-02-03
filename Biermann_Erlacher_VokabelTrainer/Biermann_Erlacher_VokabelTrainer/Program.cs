@@ -10,6 +10,7 @@ namespace Biermann_Erlacher_VokabelTrainer
         static void Main(string[] args)
         {
             string filePath = "..//..//..//TranslationFiles//Übersetzungen.csv";
+            string choice = null;
             bool inputEnd = true;
             bool fileExists = File.Exists(filePath);
             VocabularyManager vocabularyList = new VocabularyManager();
@@ -23,7 +24,26 @@ namespace Biermann_Erlacher_VokabelTrainer
             }
 
             //Parse vocabularyList from CSV
-            vocabularyList.CsvParser(filePath);
+            //Exception wenn Datei nicht lesbar, z.b offen etc
+            //Funktioniert leider noch nicht ganz...
+            do
+            {
+                int check = vocabularyList.CsvParser(filePath);
+                if (check == 0)
+                {
+                    Console.WriteLine("Die Datei konnte nicht gelesen werden. Überprüfen sie ob sie die Datei nicht geöffnet haben");
+                    Console.WriteLine("A - drücken um es erneut zu versuchen");
+                    Console.WriteLine("Zum Beenden drücken Sie Enter");
+                    choice = Console.ReadLine();
+                    if (!(choice=="A")&&!(choice=="a"))
+                    {
+                        return;
+                    }
+                }
+            } while (choice == "A" || choice=="a");
+
+            Console.WriteLine("Die Datei wurde soeben erfolgreich eingelesen");
+            
 
             do
             {
