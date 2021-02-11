@@ -7,69 +7,90 @@ namespace Biermann_Erlacher_VokabelTrainer
 {
     class Program
     {
+        static string filePath = "..//..//..//TranslationFiles//Übersetzungen.csv";
         static void Main(string[] args)
         {
-            string filePath = "..//..//..//TranslationFiles//Übersetzungen.csv";
-            string choice = null;
-            bool inputEnd = true;
-            bool fileExists = File.Exists(filePath);
+            bool exception = true;
+            bool readFileAgain = true;
+            string input;
             VocabularyManager vocabularyList = new VocabularyManager();
 
-            if (!fileExists)
-            {
-                Console.WriteLine("Die Datei befindet sich nicht im Angegebenen Ordner");
-                Console.WriteLine("Beliebige Taste zum Beenden drücken");
-                Console.ReadLine();
-                return;
-            }
-
-            //Parse vocabularyList from CSV
-            //Exception wenn Datei nicht lesbar, z.b offen etc
-            //Funktioniert leider noch nicht ganz...
+            //Try to read file - if exception -> try again or quit
             do
             {
-                int check = vocabularyList.CsvParser(filePath);
-                if (check == 0)
+                try
                 {
-                    Console.WriteLine("Die Datei konnte nicht gelesen werden. Überprüfen sie ob sie die Datei nicht geöffnet haben");
-                    Console.WriteLine("A - drücken um es erneut zu versuchen");
-                    Console.WriteLine("Zum Beenden drücken Sie Enter");
-                    choice = Console.ReadLine();
-                    if (!(choice == "A") && !(choice == "a"))
+                    vocabularyList.CsvParser(filePath);
+                    exception = false;
+                    readFileAgain = false;
+                }
+                catch (FileNotFoundException)
+                {
+                    Console.WriteLine("Die Datei mit dem Namen -Übersetzungen.csv- befindet sich nicht im angegebenen Ordner.");
+                    exception = true;
+                }
+                catch (DirectoryNotFoundException)
+                {
+                    Console.WriteLine("Der Angegebene Datei Pfad exestiert nicht.");
+                    exception = true;
+                }
+                catch (IOException)
+                {
+                    Console.WriteLine("Die Datei wird gerade wo anders benutzt. Bitte schließen sie die Datei und versuchen sie es nochmal");
+                    exception = true;
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Ein Unbekannter Fehler ist aufgetreten.");
+                    exception = true;
+                }
+                if (exception)
+                {
+                    Console.WriteLine("A - drücken um zu wiederholen");
+                    Console.WriteLine("Beliebige Taste drücken um zu beenden");
+                    input = Console.ReadLine();
+
+                    if (input == "A" || input == "a")
+                    {
+                        readFileAgain = true;
+                    }
+                    else
                     {
                         return;
                     }
+                    
                 }
-            } while (choice == "A" || choice == "a");
+            } while (readFileAgain);
 
             Console.WriteLine("Die Datei wurde soeben erfolgreich eingelesen");
 
-            //do
-            //{
-                bool checkChoice = true;
-                Console.WriteLine("Willkommen zum Vokabeltrainer");
-                Console.WriteLine("Um der Liste ein neues Wort anzuhängen drücken sie bitte >A<\nUm auf 10 Vokabeln geprüft zu werden drücken Sie bitte >T<\nUm das Programm zu beenden drücken Sie bitte >E<");
-                do
+
+            bool checkChoice = true;
+            Console.WriteLine("Willkommen zum Vokabeltrainer");
+            Console.WriteLine("Um der Liste ein neues Wort anzuhängen drücken sie bitte >A<");
+            Console.WriteLine("Um auf 10 Vokabeln geprüft zu werden drücken Sie bitte >T<");
+            Console.WriteLine("Um das Programm zu beenden drücken Sie bitte >E<");
+            do
+            {
+                string inputChoice = Console.ReadLine();
+                //Auswahl für groß und kleinbuchstaben...
+                //inputEnd ...übersichtlicher...
+                //bei falscher eingabe nicht ganz zum anfang hüpfen...
+                //...nach while schleife abfrage ob programm beendet werden soll...
+                switch (inputChoice)
                 {
-                    string inputChoice = Console.ReadLine();
-                    //Auswahl für groß und kleinbuchstaben...
-                    //inputEnd ...übersichtlicher...
-                    //bei falscher eingabe nicht ganz zum anfang hüpfen...
-                    //...nach while schleife abfrage ob programm beendet werden soll...
-                    switch (inputChoice)
-                    {
-                        case "a": AddTranslation(vocabularyList); checkChoice = true; break;
-                        case "A": AddTranslation(vocabularyList); checkChoice = true; break;
-                        case "t": VocabularyTest(vocabularyList); checkChoice = true; break;
-                        case "T": VocabularyTest(vocabularyList); checkChoice = true; break;
-                        
-                           
-                        default:
-                            checkChoice = false;
-                            Console.WriteLine("Falsche Eingabe, bitte Buchstaben eingeben");
-                            break;
-                    }
-                } while (!checkChoice);
+                    case "a": AddTranslation(vocabularyList); checkChoice = true; break;
+                    case "A": AddTranslation(vocabularyList); checkChoice = true; break;
+                    case "t": VocabularyTest(vocabularyList); checkChoice = true; break;
+                    case "T": VocabularyTest(vocabularyList); checkChoice = true; break;
+
+
+                    default:
+                        checkChoice = false;
+                        Console.WriteLine("Falsche Eingabe, bitte Buchstaben eingeben");
+                        break;
+                }
+            } while (!checkChoice);
 
             //Console.WriteLine("Soll Programm beendet werden? J/N");
             //string end = Console.ReadLine();
@@ -153,6 +174,7 @@ namespace Biermann_Erlacher_VokabelTrainer
                 //creating new translation and add new Translation to the list
                 Translator translation = new Translator(newTranslations, languageArray);
                 vocabularyList.AddNewWordsToList(translation);
+                vocabularyList.AddWordsToCSV(filePath, newTranslations);
             }
             Console.WriteLine("\nWollen sie noch weitere Wörter hinzufügen schreiben sie ja");
             Console.WriteLine("Ansonsten beliebige Taste und enter drücken");
@@ -181,7 +203,7 @@ namespace Biermann_Erlacher_VokabelTrainer
             string[] translationArray = vocabularyList.GetLanguages();
             for (int i = 0; i < translationArray.Length; i++)
             {                
-                Console.Write("{0} {1} ", i, translationArray[i]);    //{0} soll die Nummer der Sprache schreiben, also 1. 2. 3. 4. usw.... fängt aber bei 0 an zu zählen                 
+                Console.Write("{0} {1} ", i+1, translationArray[i]);    //{0} soll die Nummer der Sprache schreiben, also 1. 2. 3. 4. usw.... fängt aber bei 0 an zu zählen                 
             }
 
 

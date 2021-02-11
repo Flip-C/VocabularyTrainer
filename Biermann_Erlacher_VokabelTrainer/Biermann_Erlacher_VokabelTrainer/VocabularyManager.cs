@@ -26,26 +26,9 @@ namespace Biermann_Erlacher_VokabelTrainer
         #endregion
 
         #region methods
-        public int CsvParser(string filePath)
+        //parse csv words into a list - each element of the list is a translation
+        public void CsvParser(string filePath)
         {
-            //zwei versionen, einmal mit File.ReadAllLines und einmal mit StreamReader
-
-            /*
-            string[] readedLines = File.ReadAllLines(filePath);
-            languagesArray = readedLines[0].Split(';');
-            string[] translations = new string[languagesArray.Length];
-
-            foreach (string line in readedLines)
-            {
-                if (!line.StartsWith(languagesArray[0]))
-                {
-                    translations = line.Split(';');
-                    this.translationList.Add(new Translator { Languages = languagesArray, Translations = translations });
-                }
-            }
-            */
-
-
             try
             {
                 using (StreamReader reader = new StreamReader(filePath))
@@ -63,15 +46,21 @@ namespace Biermann_Erlacher_VokabelTrainer
                             this.translationList.Add(new Translator { Languages = languagesArray, Translations = translations });
                         }
                     }
-                    return -1;
                 }
-
             }
             catch (Exception)
             {
-                return 0 ;
                 throw;
             }
+        }
+
+        public void AddWordsToCSV(string filePath, string[] newTranslation)
+        {
+            
+            //using(StreamWriter writer = new StreamWriter(filePath))
+            //{
+            //    writer.WriteLine(newTranslation);
+            //}
         }
 
 
@@ -81,16 +70,14 @@ namespace Biermann_Erlacher_VokabelTrainer
         //neue wörter zur liste hinzufügen
         //Im Main überprüfen und User auf etwaiige Fehler hinweisen
         //return true or false
-        public bool AddNewWordsToList(Translator newTranslator)
+        public void AddNewWordsToList(Translator newTranslator)
         {
             try
             {
                 translationList.Add(newTranslator);
-                return true;
             }
             catch (Exception)
             {
-                return false;
                 throw;
             }        
         }
