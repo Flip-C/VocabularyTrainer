@@ -203,10 +203,8 @@ namespace Biermann_Erlacher_VokabelTrainer
             string[] translationArray = vocabularyList.GetLanguages();
             for (int i = 0; i < translationArray.Length; i++)
             {                
-                Console.Write("{0} {1} ", i+1, translationArray[i]);    //{0} soll die Nummer der Sprache schreiben, also 1. 2. 3. 4. usw.... fängt aber bei 0 an zu zählen                 
+                Console.Write("{0} {1} ", i+1, translationArray[i]);               
             }
-
-
 
 
             //...tryparse verweden und evtl Fehler bei angabe abfangen...
@@ -216,18 +214,28 @@ namespace Biermann_Erlacher_VokabelTrainer
             //...später kann 1 auch eine komplett andere sprache sein!...
 
 
-            Console.WriteLine("Erste Sprache");
+            //Überprüfen ob eingegebene zahl auch exestiert bzw der index -> sonst haben wir gleich einen IndexOutofRange
+            Console.WriteLine("\nErste Sprache");
             int trainLang1 = int.Parse(Console.ReadLine());
-            Console.WriteLine("Zweite sprache");
+            Console.WriteLine("Zweite Sprache");
             int trainLang2 = int.Parse(Console.ReadLine());
 
-            int languageIndex1=trainLang1;   //hier soll die Sprache im Array ausgewählt 
-            int languageIndex2=trainLang2;
+            int languageIndex1=trainLang1-1;   //hier soll die Sprache im Array ausgewählt 
+            int languageIndex2=trainLang2-1;   //-1 weil dem user ja der index +1 angezeigt wird und ausgewählt wird
 
-           
+            //!!!!!!!!!!!!!!!!!!!!!!!ACHTUNG LÖSUNG!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            //!!!!!!!!!!!!!!!!!!!!!!!ACHTUNG LÖSUNG!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            //Lösung für das nächste Console.WirteLine :P
+            //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!--------------->------------>Console.WriteLine("1.{0} -> {1} \n2.{1} -> {0}", translationArray[languageIndex1], translationArray[languageIndex2]);
+            //!!!!!!!!!!!!!!!!!!!!!!!ACHTUNG LÖSUNG!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            //!!!!!!!!!!!!!!!!!!!!!!!ACHTUNG LÖSUNG!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
             Console.WriteLine("In welche Sprache möchten Sie übersetzen?\n 1.{0}->{1} oder 2.{3}->{4}",trainLang1,trainLang2,trainLang2,trainLang1);
             int choice = int.Parse(Console.ReadLine());
+
+
+            //Prinzipiell schon sehr gut, nur warum machst du nicht nur die zuordnung in eine if else, dann musst du nicht den ganzen code
+            //2 mal schreiben, je nachdem was für eine Reihenfolge er wählt
 
             if (choice == 1)
             {
