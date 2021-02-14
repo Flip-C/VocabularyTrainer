@@ -220,17 +220,12 @@ namespace Biermann_Erlacher_VokabelTrainer
             Console.WriteLine("Zweite Sprache");
             int trainLang2 = int.Parse(Console.ReadLine());
 
-            int languageIndex1=trainLang1-1;   //hier soll die Sprache im Array ausgewählt 
-            int languageIndex2=trainLang2-1;   //-1 weil dem user ja der index +1 angezeigt wird und ausgewählt wird
+            int languageIndex1=trainLang1-1;    
+            int languageIndex2=trainLang2-1;   
 
-            //!!!!!!!!!!!!!!!!!!!!!!!ACHTUNG LÖSUNG!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            //!!!!!!!!!!!!!!!!!!!!!!!ACHTUNG LÖSUNG!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            //Lösung für das nächste Console.WirteLine :P
-            //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!--------------->------------>Console.WriteLine("1.{0} -> {1} \n2.{1} -> {0}", translationArray[languageIndex1], translationArray[languageIndex2]);
-            //!!!!!!!!!!!!!!!!!!!!!!!ACHTUNG LÖSUNG!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            //!!!!!!!!!!!!!!!!!!!!!!!ACHTUNG LÖSUNG!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+           
 
-            Console.WriteLine("In welche Sprache möchten Sie übersetzen?\n 1.{0}->{1} oder 2.{3}->{4}",trainLang1,trainLang2,trainLang2,trainLang1);
+            Console.WriteLine("In welche Sprache möchten Sie übersetzen?\n1.{0}->{1} oder 2.{1}->{0}",translationArray[languageIndex1],translationArray[languageIndex2]);
             int choice = int.Parse(Console.ReadLine());
 
 
@@ -239,9 +234,6 @@ namespace Biermann_Erlacher_VokabelTrainer
 
             if (choice == 1)
             {
-                languageIndex1 = trainLang1;
-                languageIndex2 = trainLang2;
-
                 int counterRightWords = 0;
 
                 for (int i = 0; i < 10; i++)
@@ -251,7 +243,7 @@ namespace Biermann_Erlacher_VokabelTrainer
                     Console.WriteLine(comparingWord);
                     //...Da würde dann eben immer der indizes kommen, den der User ausgewählt hat...
                     //...wenn er z.b von deutsch -> englisch dann das lokale sprachenarray an der stelle[1] (da steht dann englisch)...
-                    Console.WriteLine("Übersetzen Sie das Wort in {1}", translationArray[languageIndex2]);
+                    //Console.WriteLine("Übersetzen Sie das Wort in {1}",translationArray[languageIndex2]); -> funktioniert nicht 
 
                     string inputWord = Console.ReadLine(); //Lösung vom User
 
