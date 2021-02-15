@@ -54,22 +54,30 @@ namespace Biermann_Erlacher_VokabelTrainer
             }
         }
 
+        //adds words to csv File
         public void AddWordsToCSV(string filePath, string[] newTranslation)
         {
-            
-            //using(StreamWriter writer = new StreamWriter(filePath))
-            //{
-            //    writer.WriteLine(newTranslation);
-            //}
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(filePath, true))
+                {
+                    string output = "";
+                    foreach (string word in newTranslation)
+                    {
+                        output += word + ";";
+                    }
+                    output = output.Remove(output.Length - 1);
+                    writer.Write(output);
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }         
         }
 
-
-        //neue Übersetzung hinzufügen 
-        //Eingabe im Main von neuen Wörtern
-        //übergabe von neuen wörtern
-        //neue wörter zur liste hinzufügen
-        //Im Main überprüfen und User auf etwaiige Fehler hinweisen
-        //return true or false
+        //adds new words to the list
         public void AddNewWordsToList(Translator newTranslator)
         {
             try
@@ -82,13 +90,19 @@ namespace Biermann_Erlacher_VokabelTrainer
             }        
         }
 
-
-        //Reihenfolge der Übergabeparameter, random Wort, userinputword, indexRandomWord, indexUserinputWord
-        //Methode check ob übersetzung stimmt
-        //return true/false
+        //checking if input word is right translation
         public bool CheckingTranslation(string comparingWord, string inputWord, int firstLanguageIndex, int secLanguageIndex)
-        {           
-           string correctTranslation = translationList.Find(x => x.Translations[firstLanguageIndex].Contains(comparingWord)).GetTranslations(secLanguageIndex);
+        {
+            string correctTranslation;
+            try
+            {
+                correctTranslation = translationList.Find(x => x.Translations[firstLanguageIndex].Contains(comparingWord)).GetTranslations(secLanguageIndex);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            
             if (correctTranslation == inputWord)
             {
                 return true;
@@ -96,27 +110,39 @@ namespace Biermann_Erlacher_VokabelTrainer
             else
             {
                 return false;
-            }    
+            }
         }
 
 
-        //bekommt sprache übergeben von welche sie eine Wort zufällig ausgeben soll
-        //gibt ein zufälliges wort in der Liste der jeweils ausgewählten sprache wieder
-        //return zufälliges Wort einer bestimmten sprache
-        public string RandomWord(int firstLanguageindex)
-        {            
-            var random = new Random();
-            //Find Random Index of the List
-            int index = random.Next(translationList.Count); 
-            //Find A Random Translation in the List
-            Translator randomTranslation = translationList[index]; 
-            //Wählt anhand der vom User ausgewählten sprache die richtige übersetzung
-            string word = randomTranslation.Translations[firstLanguageindex]; 
-            
-            return word;
+        //Find Random word in the language the user had choosen
+        //if there is no word, find a new random index
+        public string RandomWord(int firstLanguageIndex,int secLanguageIndex)
+        {
+            bool wordInside = true;
+            string randomWord;
+            string randomWordTranslation;
+            do
+            {
+                var random = new Random();
+                int index = random.Next(translationList.Count);
+                Translator randomTranslation = translationList[index];
+                randomWord = randomTranslation.Translations[firstLanguageIndex];
+                randomWordTranslation = randomTranslation.Translations[secLanguageIndex];
+
+                if (randomWord == "" || randomWordTranslation == "")
+                {
+                    wordInside = false;
+                }
+                else
+                {
+                    wordInside = true;
+                }
+            } while (!wordInside);
+
+            return randomWord;
         }
 
-        //Gibt zurück wie viele verschieden Wörter es gibt
+        //returns the number of languages
         public int NumberOfTranslations()
         {
             return translationList.Count;
@@ -124,7 +150,7 @@ namespace Biermann_Erlacher_VokabelTrainer
         #endregion
 
 
-        //Gibt ein array zurück wo die aktuellen Sprachen gespeichert sind. z.B languagesArray[0] = deutsch; ..[1] = englisch usw...
+        //returns actual avaible languages
         #region static methods
         public string[] GetLanguages()
         {

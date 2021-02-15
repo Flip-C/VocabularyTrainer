@@ -12,7 +12,6 @@ namespace Biermann_Erlacher_VokabelTrainer
         private string[] _translations;
         #endregion
 
-
         #region constructor
         public Translator()
         {

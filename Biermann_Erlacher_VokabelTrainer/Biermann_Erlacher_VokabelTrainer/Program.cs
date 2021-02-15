@@ -63,9 +63,6 @@ namespace Biermann_Erlacher_VokabelTrainer
             } while (readFileAgain);
 
             Console.WriteLine("Die Datei wurde soeben erfolgreich eingelesen");
-
-
-            bool checkChoice = true;
             Console.WriteLine("Willkommen zum Vokabeltrainer");
             
             do
@@ -78,39 +75,38 @@ namespace Biermann_Erlacher_VokabelTrainer
 
                 switch (inputChoice)
                 {
-                    case "a": AddTranslation(vocabularyList); checkChoice = false; break;
-                    case "A": AddTranslation(vocabularyList); checkChoice = false; break;
-                    case "t": VocabularyTest(vocabularyList); checkChoice = false; break;
-                    case "T": VocabularyTest(vocabularyList); checkChoice = false; break;
-                    case "e":return;
-                    case "E":return;
-                    default:
-                        checkChoice = false;
+                    case "a": AddTranslation(vocabularyList); break;
+                    case "A": AddTranslation(vocabularyList); break;
+                    case "t": VocabularyTest(vocabularyList); break;
+                    case "T": VocabularyTest(vocabularyList); break;
+                    case "e": return;
+                    case "E": return;
+                    default:                     
                         Console.WriteLine("Falsche Eingabe, bitte Buchstaben eingeben");
                         break;
                 }
-            } while (!checkChoice);            
+            } while (true);            
         }
 
         static void AddTranslation(VocabularyManager vocabularyList)
         {
+            bool inputCorrect = true;
+            bool switchSuccess = true;
             string[] languageArray = vocabularyList.GetLanguages();
             string[] newTranslations = new string[languageArray.Length];
             int numberOfNewWords;
-            bool success = true;
-            bool switchSuccess = true;
 
             //asking for number of new words
             Console.WriteLine("Wie viele neue Wörter wollen sie hinzufügen");
             do
             {
-                success = true;
+                inputCorrect = true;
                 if (!int.TryParse(Console.ReadLine(), out numberOfNewWords))
                 {
                     Console.WriteLine("Ungültige Eingabe. Bitte Wiederholen");
-                    success = false;
+                    inputCorrect = false;
                 }
-            } while (!success);
+            } while (!inputCorrect);
 
             //Big for-loop for adding new words
             for (int i = 0; i < numberOfNewWords; i++)
@@ -140,17 +136,17 @@ namespace Biermann_Erlacher_VokabelTrainer
                     {
                         Console.Write(word.PadRight(17, ' '));
                     }
-
-                    //user decide if input is correct
-                    string choice = Console.ReadLine();
+                    Console.WriteLine();
                     do
                     {
+                        //user decide if input is correct
+                        string choice = Console.ReadLine();
                         switch (choice)
                         {
-                            case "W": success = false; break;
-                            case "w": success = false; break;
-                            case "E": success = true; break;
-                            case "e": success = true; break;
+                            case "W": inputCorrect = false; switchSuccess = true; break;
+                            case "w": inputCorrect = false; switchSuccess = true; break;
+                            case "E": inputCorrect = true; switchSuccess = true; break;
+                            case "e": inputCorrect = true; switchSuccess = true; break;
                             default:
                                 Console.WriteLine("Ungültige Eingabe. Bitte Widerholen");
                                 switchSuccess = false;
@@ -158,16 +154,24 @@ namespace Biermann_Erlacher_VokabelTrainer
                         }
                     } while (!switchSuccess);
 
-                } while (!success);
+                } while (!inputCorrect);
 
                 //creating new translation and add new Translation to the list
                 Translator translation = new Translator(newTranslations, languageArray);
-                vocabularyList.AddNewWordsToList(translation);
-                vocabularyList.AddWordsToCSV(filePath, newTranslations);
+                try
+                {
+                    vocabularyList.AddNewWordsToList(translation);
+                    vocabularyList.AddWordsToCSV(filePath, newTranslations);
+                }
+                catch (Exception )
+                {
+                    Console.WriteLine("Der Dienst ist momentan nicht verfügbar");
+                }               
             }
+
             Console.WriteLine("\nWollen sie noch weitere Wörter hinzufügen schreiben sie ja");
             Console.WriteLine("Ansonsten beliebige Taste und enter drücken");
-            if (Console.ReadLine() == "ja" || Console.ReadLine() == "Ja");
+            if (Console.ReadLine() == "ja" || Console.ReadLine() == "Ja")
             {
                 AddTranslation(vocabularyList);
             }
@@ -197,26 +201,24 @@ namespace Biermann_Erlacher_VokabelTrainer
             Console.WriteLine("In welche Sprache möchten Sie übersetzen?\n1.{0}->{1} oder 2.{1}->{0}",translationArray[languageIndex1],translationArray[languageIndex2]);
             bool choiceSucces = int.TryParse(Console.ReadLine(),out int choice);
                                
-
+            //choice überprüfen ob 1 oder 2
             if (choice == 1)
             {
                 languageIndex1 = userLang1-1;
-                languageIndex2 = userLang2-1;
-                
+                languageIndex2 = userLang2-1;                
             }
 
             if (choice == 2)
             {
                 languageIndex1 = userLang2-1;
                 languageIndex2 = userLang1-1;
-
             }
 
             int counterRightWords = 0;
 
             for (int i = 0; i < 10; i++)
             {
-                string comparingWord = vocabularyList.RandomWord(languageIndex1);
+                string comparingWord = vocabularyList.RandomWord(languageIndex1,languageIndex2);
                 Console.WriteLine();
                 Console.WriteLine(comparingWord);
                 //...Da würde dann eben immer der indizes kommen, den der User ausgewählt hat...
@@ -238,8 +240,6 @@ namespace Biermann_Erlacher_VokabelTrainer
 
             }
             Console.WriteLine("Sie haben {0} von 10 Wörter richtig\n", counterRightWords);
-
-
         }
     }
 }
