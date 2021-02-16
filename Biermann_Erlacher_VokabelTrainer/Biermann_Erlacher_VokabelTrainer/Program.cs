@@ -181,69 +181,62 @@ namespace Biermann_Erlacher_VokabelTrainer
                                 
         static void VocabularyTest(VocabularyManager vocabularyList)
         {
+            int userLang1;
+            int userLang2;
+            int choice;
+            bool choiceSuccess;
+            bool langCorrect;
+
             Console.WriteLine("Bitte beachten Sie die Groß- und Kleinschreibung der eingegebenen Wörter\n");
             Console.WriteLine("Welche Sprache soll gelernt werden?");
             string[] translationArray = vocabularyList.GetLanguages();
             for (int i = 0; i < translationArray.Length; i++)
             {                
                 Console.Write("{0} {1} ", i+1, translationArray[i]);               
-            }            
-                                    
-            bool lang1Correct;
-            int userLang1;
+            }                                               
+
             Console.WriteLine("\nIndex der ersten Sprache");
             do
             {
-                lang1Correct = true;               
-                
-                if (!int.TryParse(Console.ReadLine(), out userLang1))
-                {
-                    Console.WriteLine("Ungültige Eingabe. Bitte Wiederholen");
-                    lang1Correct = false;
-                }                
-                if (userLang1 >= translationArray.Length)
-                {
-                    Console.WriteLine("Ungültige Eingabe. Bitte Wiederholen");
-                    lang1Correct = false;
-                }
-            } while (!lang1Correct);
+                langCorrect = true;
 
-            bool lang2Correct;
-            int userLang2;
+                if (!int.TryParse(Console.ReadLine(), out userLang1) || userLang1 > translationArray.Length || userLang1 < 0)
+                {
+                    Console.WriteLine("Ungültige Eingabe. Bitte Wiederholen");
+                    langCorrect = false;
+                }
+            } while (!langCorrect);
+
             Console.WriteLine("\nIndex der zweiten Sprache");
             do
             {
-                lang2Correct = true;               
-
-                if (!int.TryParse(Console.ReadLine(), out userLang2)|| userLang2 >= translationArray.Length)
+                langCorrect = true;               
+                
+                if (!int.TryParse(Console.ReadLine(), out userLang2) || userLang2 > translationArray.Length || userLang2 < 0)
                 {
                     Console.WriteLine("Ungültige Eingabe. Bitte Wiederholen");
-                    lang2Correct = false;
+                    langCorrect = false;
                 }                
-            } while (!lang2Correct);            
+            } while (!langCorrect);            
 
             int languageIndex1=userLang1-1;    
             int languageIndex2=userLang2-1;
 
-
-            
-            int choice;
-            bool choiceSucces;
             Console.WriteLine("In welche Sprache möchten Sie übersetzen?\n1.{0}->{1} oder 2.{1}->{0}", translationArray[languageIndex1], translationArray[languageIndex2]);            
             do
             {
-                choiceSucces = true;               
+                choiceSuccess = true;               
                 if(!int.TryParse(Console.ReadLine(),out choice))
                 {
                     Console.WriteLine("Ungültige Eingabe. Bitte Wiederholen");
-                    choiceSucces = false;
+                    choiceSuccess = false;
                 }       
                 if(choice > 2 || choice < 1)
                 {
                     Console.WriteLine("Ungültige Eingabe. Bitte Wiederholen");
-                    choiceSucces = false;
+                    choiceSuccess = false;
                 }
-            } while (!choiceSucces);                                         
+            } while (!choiceSuccess);                                         
             
             if (choice == 1)
             {
