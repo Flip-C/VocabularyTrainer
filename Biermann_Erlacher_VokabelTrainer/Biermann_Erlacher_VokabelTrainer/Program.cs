@@ -188,14 +188,10 @@ namespace Biermann_Erlacher_VokabelTrainer
             {                
                 Console.Write("{0} {1} ", i+1, translationArray[i]);               
             }            
-
-            //Eingabe vom User kontrollieren also die EIngabe darf nicht höher sein als Spalten/Sprachen im LanguageArray sein 
-            //ifbedingung mit else {index existiert nicht} eingabe wiederholen -> succes für die If Schleife (false) solange es false ist wiederholen 
-                        
+                                    
             bool lang1Correct;
             int userLang1;
-
-            Console.WriteLine("Erste Sprache");
+            Console.WriteLine("\nIndex der ersten Sprache");
             do
             {
                 lang1Correct = true;               
@@ -214,8 +210,7 @@ namespace Biermann_Erlacher_VokabelTrainer
 
             bool lang2Correct;
             int userLang2;
-
-            Console.WriteLine("\nZweite Sprache");
+            Console.WriteLine("\nIndex der zweiten Sprache");
             do
             {
                 lang2Correct = true;               
@@ -237,8 +232,7 @@ namespace Biermann_Erlacher_VokabelTrainer
             Console.WriteLine("In welche Sprache möchten Sie übersetzen?\n1.{0}->{1} oder 2.{1}->{0}", translationArray[languageIndex1], translationArray[languageIndex2]);            
             do
             {
-                choiceSucces = true;
-               
+                choiceSucces = true;               
                 if(!int.TryParse(Console.ReadLine(),out choice))
                 {
                     Console.WriteLine("Ungültige Eingabe. Bitte Wiederholen");
