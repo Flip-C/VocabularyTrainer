@@ -181,6 +181,7 @@ namespace Biermann_Erlacher_VokabelTrainer
                                 
         static void VocabularyTest(VocabularyManager vocabularyList)
         {
+            Console.WriteLine("Bitte beachten Sie die Groß- und Kleinschreibung der eingegebenen Wörter\n");
             Console.WriteLine("Welche Sprache soll gelernt werden?");
             string[] translationArray = vocabularyList.GetLanguages();
             for (int i = 0; i < translationArray.Length; i++)
@@ -194,7 +195,7 @@ namespace Biermann_Erlacher_VokabelTrainer
             bool lang1Correct;
             int userLang1;
 
-            Console.WriteLine("\nErste Sprache");
+            Console.WriteLine("Erste Sprache");
             do
             {
                 lang1Correct = true;               
@@ -233,7 +234,7 @@ namespace Biermann_Erlacher_VokabelTrainer
             
             int choice;
             bool choiceSucces;
-            Console.WriteLine("In welche Sprache möchten Sie übersetzen?\n1.{0}->{1} oder 2.{1}->{0}", translationArray[languageIndex1], translationArray[languageIndex2]);
+            Console.WriteLine("In welche Sprache möchten Sie übersetzen?\n1.{0}->{1} oder 2.{1}->{0}", translationArray[languageIndex1], translationArray[languageIndex2]);            
             do
             {
                 choiceSucces = true;
@@ -255,7 +256,6 @@ namespace Biermann_Erlacher_VokabelTrainer
                 languageIndex1 = userLang1-1;
                 languageIndex2 = userLang2-1;                
             }
-
             if (choice == 2)
             {
                 languageIndex1 = userLang2-1;
@@ -263,29 +263,31 @@ namespace Biermann_Erlacher_VokabelTrainer
             }
 
             int counterRightWords = 0;
-
             for (int i = 0; i < 10; i++)
             {
+                Console.Clear();
                 string comparingWord = vocabularyList.RandomWord(languageIndex1,languageIndex2);
                 Console.WriteLine();
                 Console.WriteLine(comparingWord);                
                 Console.WriteLine("Übersetzen Sie das Wort in {0}", translationArray[languageIndex2]);
 
                 string inputWord = Console.ReadLine(); //Lösung vom User
-
                 bool success1 = vocabularyList.CheckingTranslation(comparingWord, inputWord, languageIndex1, languageIndex2);
                 if (success1)
                 {
-                    Console.WriteLine("Wort ist richtig");
+                    Console.WriteLine("Wort ist richtig. Enter -> nächstes Wort");
+                    Console.ReadLine();
                     counterRightWords++;
                 }
                 else
                 {
-                    Console.WriteLine("Wort ist falsch");
+                    Console.WriteLine("Wort ist falsch. Enter -> nächstes Wort");
+                    Console.ReadLine();
                 }
-
             }
             Console.WriteLine("Sie haben {0} von 10 Wörter richtig\n", counterRightWords);
+            Console.ReadLine();
+            Console.Clear();
         }
     }
 }
