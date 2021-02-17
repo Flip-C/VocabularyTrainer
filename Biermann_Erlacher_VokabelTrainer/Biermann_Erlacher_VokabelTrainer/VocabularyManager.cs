@@ -116,20 +116,19 @@ namespace Biermann_Erlacher_VokabelTrainer
 
         //Find Random word in the language the user had choosen
         //if there is no word, find a new random index
-        public string RandomWord(int firstLanguageIndex,int secLanguageIndex)
+        public string[] RandomWord(int firstLanguageIndex,int secLanguageIndex)
         {
             bool wordInside = true;
-            string randomWord;
-            string randomWordTranslation;
+            string[] randomWord = new string[2];
             do
             {
                 var random = new Random();
                 int index = random.Next(translationList.Count);
                 Translator randomTranslation = translationList[index];
-                randomWord = randomTranslation.Translations[firstLanguageIndex];
-                randomWordTranslation = randomTranslation.Translations[secLanguageIndex];
+                randomWord[0] = randomTranslation.Translations[firstLanguageIndex];
+                randomWord[1] = randomTranslation.Translations[secLanguageIndex];
 
-                if (randomWord == "" || randomWordTranslation == "")
+                if (randomWord[0] == "" || randomWord[1] == "")
                 {
                     wordInside = false;
                 }
