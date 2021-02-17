@@ -252,22 +252,28 @@ namespace Biermann_Erlacher_VokabelTrainer
             }
 
 
-            int counterRightWords = 0;           
+            int counterRightWords = 0;
+            string[] collectionWords = new string[2];
+            string randomWord;
+            string randomWordTransl;
+            
             
             successTranslation = true;
             for (int i = 0; i < 10; i++)
             {
                 Console.Clear();
-                string randomWord = vocabularyList.RandomWord(languageIndex1, languageIndex2);
+                collectionWords = vocabularyList.RandomWord(languageIndex1, languageIndex2);
+                randomWord = collectionWords[0];
+                randomWordTransl = collectionWords[1];
                 Console.WriteLine();
                 Console.WriteLine(randomWord);
                 Console.WriteLine("Übersetzen Sie das Wort in {0}", translationArray[languageIndex2]);
+                int tippNumber = 0;
 
-                
+                string inputWord = Console.ReadLine(); //Input from User
                 do
                 {
-                    successTranslation = true;
-                    string inputWord = Console.ReadLine(); //Input from User
+                    successTranslation = true;                    
                     bool success1 = vocabularyList.CheckingTranslation(randomWord, inputWord, languageIndex1, languageIndex2);
                     if (success1)
                     {
@@ -278,14 +284,33 @@ namespace Biermann_Erlacher_VokabelTrainer
                         successTranslation = true;
                     }
                     else
-                    {
+                    {                          
                         //wrong Translation -> Tipp   
-                        Console.WriteLine("Das Wort ist falsch. Hier ein Tipp:");
-                        tippWord = randomWord;//müsste correctTranslation sein
-                        tippWord = tippWord.Remove(tippWord.Length - 2);
-                        Console.WriteLine("{0} -> Versuchen Sie es erneut", tippWord);
-                        inputWord = Console.ReadLine();
-                        success1 = vocabularyList.CheckingTranslation(randomWord, inputWord, languageIndex1, languageIndex2);
+                        Console.WriteLine("Das Wort ist falsch.");
+                        if (randomWordTransl.Length >= 3)
+                        {                           
+                            tippNumber++;
+                            tippWord = randomWordTransl.Remove(randomWordTransl.Length - (randomWordTransl.Length - tippNumber));
+                            Console.WriteLine("Hier ein Tipp: {0} -> Versuchen Sie es erneut", tippWord);
+                            inputWord = Console.ReadLine();                            
+                            success1 = vocabularyList.CheckingTranslation(randomWord, inputWord, languageIndex1, languageIndex2);
+                        }                        
+                        
+                        if (success1)
+                        {
+                            Console.WriteLine("Das Wort ist richtig.");
+                            successTranslation = true;
+                        }
+                        else
+                        {
+                            successTranslation = false;
+                        }
+                        if (tippNumber == 3)
+                        {
+                            Console.WriteLine("Das Wort ist falsch.");
+                            Console.ReadLine();
+                            successTranslation = true;
+                        }
                     }                    
                 } while (!successTranslation);                
             }   
