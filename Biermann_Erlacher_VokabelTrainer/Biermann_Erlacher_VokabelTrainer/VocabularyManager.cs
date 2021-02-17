@@ -139,7 +139,7 @@ namespace Biermann_Erlacher_VokabelTrainer
                 }
             } while (!wordInside);
 
-            return randomWord;
+            return randomWord;            
         }
 
         //returns the number of languages
