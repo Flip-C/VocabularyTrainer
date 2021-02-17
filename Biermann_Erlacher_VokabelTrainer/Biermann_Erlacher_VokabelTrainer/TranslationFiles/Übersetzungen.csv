@@ -1,9 +1,10 @@
-deutsch;englisch;franzoesisch;italienisch;tuerkisch
-Baum;tree;arbre;albero;moin
-Haus;house;maison;casa;a?aç
-Geld;money;argent;i soldi;
-Apfel;apple;pomme;mela;
-Hallo;hello;;;
-Gelb;yellow;;;
-Gruen;green;;;
-Hund;dog;;;
+deutsch;englisch;franzoesisch;italienisch
+Baum;tree;arbre;albero
+Haus;house;maison;casa
+Geld;money;argent;i soldi
+Apfel;apple;pomme;mela
+Hallo;hello;;
+Gelb;yellow;;
+Gruen;green;;
+Hund;dog;;
+Angst;fear;;

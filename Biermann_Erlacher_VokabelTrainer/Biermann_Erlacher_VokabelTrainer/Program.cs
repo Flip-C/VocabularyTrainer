@@ -8,6 +8,7 @@ namespace Biermann_Erlacher_VokabelTrainer
     class Program
     {
         static string filePath = "..//..//..//TranslationFiles//Übersetzungen.csv";
+
         static void Main(string[] args)
         {
             bool exception = true;
@@ -62,10 +63,9 @@ namespace Biermann_Erlacher_VokabelTrainer
                 }
             } while (readFileAgain);
 
-
-            //Start the console program
-            Console.WriteLine("Die Datei wurde soeben erfolgreich eingelesen");
-            Console.WriteLine("Willkommen zum Vokabeltrainer");
+            //Information file is successfully loaded
+            Console.WriteLine("Die Datei wurde soeben erfolgreich eingelesen.");
+            Console.WriteLine("Willkommen zum Vokabeltrainer.");
 
             //choose function 
             do
@@ -74,7 +74,6 @@ namespace Biermann_Erlacher_VokabelTrainer
                 Console.WriteLine("Um auf 10 Vokabeln geprüft zu werden drücken Sie bitte >T<");
                 Console.WriteLine("Um das Programm zu beenden drücken Sie bitte >E<");
                 string inputChoice = Console.ReadLine();
-                               
 
                 switch (inputChoice)
                 {
@@ -91,10 +90,11 @@ namespace Biermann_Erlacher_VokabelTrainer
             } while (true);            
         }
 
+        //methode for adding new words to the file
         static void AddTranslation(VocabularyManager vocabularyList)
         {
-            bool inputCorrect = true;
-            bool switchSuccess = true;
+            bool enteredCorrectly = true;
+            bool validInput = true;
             string[] languageArray = vocabularyList.GetLanguages();
             string[] newTranslations = new string[languageArray.Length];
             int numberOfNewWords;
@@ -103,13 +103,13 @@ namespace Biermann_Erlacher_VokabelTrainer
             Console.WriteLine("Wie viele neue Wörter wollen sie hinzufügen");
             do
             {
-                inputCorrect = true;
+                enteredCorrectly = true;
                 if (!int.TryParse(Console.ReadLine(), out numberOfNewWords))
                 {
                     Console.WriteLine("Ungültige Eingabe. Bitte Wiederholen");
-                    inputCorrect = false;
+                    enteredCorrectly = false;
                 }
-            } while (!inputCorrect);
+            } while (!enteredCorrectly);
 
             //Big for-loop for adding new words
             for (int i = 0; i < numberOfNewWords; i++)
@@ -127,17 +127,18 @@ namespace Biermann_Erlacher_VokabelTrainer
                     Console.WriteLine("\nKontrollieren sie ihre Eingabe.");
                     Console.WriteLine("W - Eingabe Widerholen");
                     Console.WriteLine("E - Eingabe Bestätigen");
+                    Console.WriteLine("A - Eingabe Abbrechen");
                     Console.WriteLine("Ihre erste eingabe lautet:\n");
 
                     //Output languages and input words
                     foreach (var language in languageArray)
                     {
-                        Console.Write(language.PadRight(17, ' '));
+                        Console.Write(language.PadRight(20, ' '));
                     }
                     Console.WriteLine();
                     foreach (var word in newTranslations)
                     {
-                        Console.Write(word.PadRight(17, ' '));
+                        Console.Write(word.PadRight(20, ' '));
                     }
                     Console.WriteLine();
                     do
@@ -146,18 +147,21 @@ namespace Biermann_Erlacher_VokabelTrainer
                         string choice = Console.ReadLine();
                         switch (choice)
                         {
-                            case "W": inputCorrect = false; switchSuccess = true; break;
-                            case "w": inputCorrect = false; switchSuccess = true; break;
-                            case "E": inputCorrect = true; switchSuccess = true; break;
-                            case "e": inputCorrect = true; switchSuccess = true; break;
+                            case "W": enteredCorrectly = false; validInput = true; break;
+                            case "w": enteredCorrectly = false; validInput = true; break;
+                            case "E": enteredCorrectly = true; validInput = true; break;
+                            case "e": enteredCorrectly = true; validInput = true; break;
+                            case "A": Console.Clear(); return; 
+                            case "a": Console.Clear(); return; 
+
                             default:
-                                Console.WriteLine("Ungültige Eingabe. Bitte Widerholen");
-                                switchSuccess = false;
+                                Console.WriteLine("Ungültige Eingabe. Bitte Wiederholen");
+                                validInput = false;
                                 break;
                         }
-                    } while (!switchSuccess);
+                    } while (!validInput);
 
-                } while (!inputCorrect);
+                } while (!enteredCorrectly);
 
                 //creating new translation and add new Translation to the list
                 Translator translation = new Translator(newTranslations, languageArray);
@@ -168,16 +172,19 @@ namespace Biermann_Erlacher_VokabelTrainer
                 }
                 catch (Exception )
                 {
-                    Console.WriteLine("Der Dienst ist momentan nicht verfügbar");
+                    Console.WriteLine("Der Dienst ist momentan nicht verfügbar..");
                 }               
             }
 
+            //Asking for other new words
             Console.WriteLine("\nWollen sie noch weitere Wörter hinzufügen schreiben sie ja");
             Console.WriteLine("Ansonsten beliebige Taste und enter drücken");
             if (Console.ReadLine() == "ja" || Console.ReadLine() == "Ja")
             {
                 AddTranslation(vocabularyList);
+                Console.Clear();
             }
+            Console.Clear();
         }
 
 
@@ -187,11 +194,10 @@ namespace Biermann_Erlacher_VokabelTrainer
             int userLang1;
             int userLang2;
             int choice;
-            string tippWord = "";
+            string tippWord;
             bool successChoice;
             bool successLanguage;
-            bool successTranslation;
-
+            bool translationSuccess;
 
             //decision which language to learn 
             Console.WriteLine("Bitte beachten Sie die Groß- und Kleinschreibung der eingegebenen Wörter\n");
@@ -202,7 +208,8 @@ namespace Biermann_Erlacher_VokabelTrainer
             for (int i = 0; i < translationArray.Length; i++)
             {                
                 Console.Write("{0} {1} ", i+1, translationArray[i]);               
-            }                                               
+            }             
+            
             //select the first language by Index
             Console.WriteLine("\nIndex der ersten Sprache");
             do
@@ -215,17 +222,23 @@ namespace Biermann_Erlacher_VokabelTrainer
                     successLanguage = false;
                 }
             } while (!successLanguage);
+
             //select the second language by Index
             Console.WriteLine("\nIndex der zweiten Sprache");
             do
             {
-                successLanguage = true;               
-                
+                successLanguage = true;
+
                 if (!int.TryParse(Console.ReadLine(), out userLang2) || userLang2 > translationArray.Length || userLang2 < 0)
                 {
                     Console.WriteLine("Ungültige Eingabe. Bitte Wiederholen");
                     successLanguage = false;
-                }                
+                }
+                if (userLang2==userLang1)
+                {
+                    Console.WriteLine("Sie können nicht zweimal den die Selbe Sprache auswählen. Bitte Widerholen!");
+                    successLanguage = false;
+                }
             } while (!successLanguage);            
 
 
@@ -233,6 +246,7 @@ namespace Biermann_Erlacher_VokabelTrainer
             int languageIndex1=userLang1-1;    
             int languageIndex2=userLang2-1;
 
+            //choose direction of query
             Console.WriteLine("In welche Sprache möchten Sie übersetzen?\n1.{0}->{1} oder 2.{1}->{0}", translationArray[languageIndex1], translationArray[languageIndex2]);            
             do
             {
@@ -242,13 +256,14 @@ namespace Biermann_Erlacher_VokabelTrainer
                     Console.WriteLine("Ungültige Eingabe. Bitte Wiederholen");
                     successChoice = false;
                 }       
-                if(choice > 2 || choice < 1)
+                if(choice !=1 && choice != 2)
                 {
                     Console.WriteLine("Ungültige Eingabe. Bitte Wiederholen");
                     successChoice = false;
                 }
             } while (!successChoice);                                         
             
+            //select order
             if (choice == 1)
             {
                 languageIndex1 = userLang1-1;
@@ -260,18 +275,16 @@ namespace Biermann_Erlacher_VokabelTrainer
                 languageIndex2 = userLang1-1;
             }
 
-
-
             //translation programm
             int counterRightWords = 0;
             string[] collectionWords = new string[2];
             string randomWord;
-            string randomWordTransl;            
-            
-            successTranslation = true;
+            string randomWordTransl; 
+
+            translationSuccess = true;
             for (int i = 0; i < 10; i++)
             {
-                //get a RandomWord for trainig 
+                //get a RandomWord and the right translation for training 
                 Console.Clear();
                 collectionWords = vocabularyList.RandomWord(languageIndex1, languageIndex2);
                 randomWord = collectionWords[0];
@@ -279,52 +292,65 @@ namespace Biermann_Erlacher_VokabelTrainer
                 Console.WriteLine();
                 Console.WriteLine(randomWord);
                 Console.WriteLine("Übersetzen Sie das Wort in {0}", translationArray[languageIndex2]);
-                int tippNumber = 0;
 
+                //For counting the wrong inputs 
+                int tippNumber = 0;
                 //translation from User
                 string inputWord = Console.ReadLine(); 
                 do
                 {
-                    successTranslation = true;                    
-                    bool success1 = vocabularyList.CheckingTranslation(randomWord, inputWord, languageIndex1, languageIndex2);
-                    if (success1)
+                    string placeHolder = "";
+                    translationSuccess = true;        
+                    //Checking input from user
+                    bool inputRight = vocabularyList.CheckingTranslation(randomWord, inputWord, languageIndex1, languageIndex2);
+                    if (inputRight)
                     {
                         //correct Translation
                         Console.WriteLine("Wort ist richtig. Enter -> nächstes Wort");
                         Console.ReadLine();
                         counterRightWords++;
-                        successTranslation = true;
+                        translationSuccess = true;
                     }
                     else
                     {                          
                         //wrong Translation -> Tip 
                         Console.WriteLine("Das Wort ist falsch.");
-                        if (randomWordTransl.Length >= 3)//if the word is less than 3 he will not get any tips 
+                        //if the word is less than 3 he will not get any tips
+                        if (randomWordTransl.Length >= 3) 
                         {                           
                             tippNumber++;
-                            tippWord = randomWordTransl.Remove(randomWordTransl.Length - (randomWordTransl.Length - tippNumber));//first letters of the word as tip
-                            Console.WriteLine("Hier ein Tipp: {0} -> Versuchen Sie es erneut", tippWord);
+                            //first letters of the word as tip
+                            tippWord = randomWordTransl.Remove(randomWordTransl.Length - (randomWordTransl.Length - tippNumber));
+                            for (int j = 0; j < randomWordTransl.Length - tippNumber; j++)
+                            {
+                                placeHolder += " _";
+                            }
+                            Console.WriteLine("Hier ein Tipp: {0}{1} -> Versuchen Sie es erneut", tippWord, placeHolder);
                             inputWord = Console.ReadLine();                            
-                            success1 = vocabularyList.CheckingTranslation(randomWord, inputWord, languageIndex1, languageIndex2);
+                            inputRight = vocabularyList.CheckingTranslation(randomWord, inputWord, languageIndex1, languageIndex2);
                         }                           
-                        if (success1)
+                        if (inputRight)
                         {
-                            Console.WriteLine("Das Wort ist richtig.");
-                            successTranslation = true;
+                            Console.WriteLine("Wort ist richtig. Enter -> nächstes Wort");
+                            Console.ReadLine();
+                            counterRightWords++;
+                            translationSuccess = true;
                         }
-                        else
-                        {
-                            successTranslation = false;
-                        }
-                        if (tippNumber == 3)//if the word is wrong after the third time it is considered wrong
+                        //if the word is wrong after the third input it is considered wrong
+                        else if(tippNumber == 2)
                         {
                             Console.WriteLine("Das Wort ist falsch.");
                             Console.ReadLine();
-                            successTranslation = true;
+                            translationSuccess = true;
+                        }
+                        else
+                        {
+                            translationSuccess = false;
                         }
                     }                    
-                } while (!successTranslation);                
+                } while (!translationSuccess);                
             }   
+            //Result
             Console.WriteLine("Sie haben {0} von 10 Wörter richtig\n", counterRightWords);
             Console.ReadLine();
             Console.Clear();

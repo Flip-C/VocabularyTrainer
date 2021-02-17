@@ -50,17 +50,15 @@ namespace Biermann_Erlacher_VokabelTrainer
                 _translations = value;
             }
         }
-
         #endregion
 
 
         #region methods
+        //return a choosen word of a translation
         public string GetTranslations(int index)
         {
             return Translations[index];
-        }
-
-        
+        }      
         #endregion
     }
 }

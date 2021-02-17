@@ -12,7 +12,7 @@ namespace Biermann_Erlacher_VokabelTrainer
         #endregion
 
         #region static members
-        static string[] languagesArray;
+        private static string[] languagesArray;
         #endregion
 
         #region constructor
@@ -20,9 +20,6 @@ namespace Biermann_Erlacher_VokabelTrainer
         {
             this.translationList = new List<Translator>();
         }
-        #endregion
-
-        #region properties
         #endregion
 
         #region methods
@@ -91,12 +88,12 @@ namespace Biermann_Erlacher_VokabelTrainer
         }
 
         //checking if input word is right translation
-        public bool CheckingTranslation(string comparingWord, string inputWord, int firstLanguageIndex, int secLanguageIndex)
+        public bool CheckingTranslation(string comparingWord, string inputWord, int langIndex1, int langIndex2)
         {
             string correctTranslation;
             try
             {
-                correctTranslation = translationList.Find(x => x.Translations[firstLanguageIndex].Contains(comparingWord)).GetTranslations(secLanguageIndex);
+                correctTranslation = translationList.Find(x => x.Translations[langIndex1].Contains(comparingWord)).GetTranslations(langIndex2);
             }
             catch (Exception)
             {
@@ -114,7 +111,7 @@ namespace Biermann_Erlacher_VokabelTrainer
         }
 
 
-        //Find Random word in the language the user had choosen
+        //Find Random word and the right translation in the language the user had choosen
         //if there is no word, find a new random index
         public string[] RandomWord(int firstLanguageIndex,int secLanguageIndex)
         {
@@ -125,7 +122,9 @@ namespace Biermann_Erlacher_VokabelTrainer
                 var random = new Random();
                 int index = random.Next(translationList.Count);
                 Translator randomTranslation = translationList[index];
+                //random word
                 randomWord[0] = randomTranslation.Translations[firstLanguageIndex];
+                //translation of the random word
                 randomWord[1] = randomTranslation.Translations[secLanguageIndex];
 
                 if (randomWord[0] == "" || randomWord[1] == "")
@@ -141,16 +140,7 @@ namespace Biermann_Erlacher_VokabelTrainer
             return randomWord;            
         }
 
-        //returns the number of languages
-        public int NumberOfTranslations()
-        {
-            return translationList.Count;
-        }
-        #endregion
-
-
         //returns actual avaible languages
-        #region static methods
         public string[] GetLanguages()
         {
             return languagesArray;
